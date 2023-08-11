@@ -22,5 +22,17 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+install(
+  DIRECTORY
+    launch
+    robot
+  DESTINATION
+    share/${PROJECT_NAME}/
+)
 
+install(
+  PROGRAMS
+  launch/spawn_robot.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 ament_package()
