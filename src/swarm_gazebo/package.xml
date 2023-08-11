@@ -9,9 +9,15 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>ament_cmake</depend>
+  <depend>rclcpp</depend>
+  <depend>rclpy</depend>
+
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
+  <exec_depend>gazebo_ros_pkgs</exec_depend>
+  <exec_depend>ros2launch</exec_depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>
