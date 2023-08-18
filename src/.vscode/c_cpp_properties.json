@@ -7,8 +7,6 @@
       },
       "includePath": [
         "/opt/ros/humble/include/**",
-        "/home/swarmmaster/swarm_workbench/src/swarm_description/include/**",
-        "/home/swarmmaster/swarm_workbench/src/swarm_gazebo/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
