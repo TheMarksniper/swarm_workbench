@@ -57,7 +57,7 @@ def generate_launch_description():
         executable='robot_state_publisher',
         namespace=robot_namespace,
         remappings=remappings,
-        parameters=[{'robot_description': launch.substitutions.Command(['xacro ',os.path.join(swarm_description_dir,'urdf/robots/2wd.urdf.xacro')])}]
+        parameters=[{'robot_description': launch.substitutions.Command(['xacro ',os.path.join(swarm_description_dir,'urdf/linorobot2/robots/2wd.urdf.xacro')])}]
 
         ) 
         #IncludeLaunchDescription(
