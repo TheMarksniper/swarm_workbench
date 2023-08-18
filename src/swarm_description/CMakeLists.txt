@@ -28,6 +28,7 @@ install(
   DIRECTORY
     launch
     robot
+    urdf
   DESTINATION
     share/${PROJECT_NAME}/
 )

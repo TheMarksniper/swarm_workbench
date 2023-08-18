@@ -16,22 +16,22 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     use_sim_time = True
-    slam_launch_path = PathJoinSubstitution(
-        [FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py']
-    )
-
-    slam_config_path = PathJoinSubstitution(
-        [FindPackageShare('linorobot2_navigation'), 'config', 'slam.yaml']
-    )
-
-    rviz_config_path = PathJoinSubstitution(
-        [FindPackageShare('linorobot2_navigation'), 'rviz', 'linorobot2_slam.rviz']
-    )
-    
-    description_launch_path = PathJoinSubstitution(
-        [FindPackageShare('linorobot2_description'), 'launch', 'description.launch.py']
-    )
-    linorobot2_description_dir = FindPackageShare(package='linorobot2_description').find('linorobot2_description')
+    #slam_launch_path = PathJoinSubstitution(
+    #    [FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py']
+    #)
+#
+    #slam_config_path = PathJoinSubstitution(
+    #    [FindPackageShare('linorobot2_navigation'), 'config', 'slam.yaml']
+    #)
+#
+    #rviz_config_path = PathJoinSubstitution(
+    #    [FindPackageShare('linorobot2_navigation'), 'rviz', 'linorobot2_slam.rviz']
+    #)
+    #
+    #description_launch_path = PathJoinSubstitution(
+    #    [FindPackageShare('linorobot2_description'), 'launch', 'description.launch.py']
+    #)
+    swarm_description_dir = FindPackageShare(package='swarm_description').find('swarm_description')
     lc = LaunchContext()
     ros_distro = EnvironmentVariable('ROS_DISTRO')
     slam_param_name = 'slam_params_file'
@@ -57,7 +57,7 @@ def generate_launch_description():
         executable='robot_state_publisher',
         namespace=robot_namespace,
         remappings=remappings,
-        parameters=[{'robot_description': launch.substitutions.Command(['xacro ',os.path.join(linorobot2_description_dir,'urdf/robots/2wd.urdf.xacro')])}]
+        parameters=[{'robot_description': launch.substitutions.Command(['xacro ',os.path.join(swarm_description_dir,'urdf/robots/2wd.urdf.xacro')])}]
 
         ) 
         #IncludeLaunchDescription(

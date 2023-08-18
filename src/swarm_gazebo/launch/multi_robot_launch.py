@@ -17,7 +17,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     use_sim_time = True
     description_launch_path = PathJoinSubstitution(
-        [FindPackageShare('linorobot2_description'), 'launch', 'description.launch.py']
+        [FindPackageShare('swarm_description'), 'launch', 'description.launch.py']
     )
     pkg_swarm_gazebo = get_package_share_directory('swarm_gazebo')
     pkg_swarm_description = get_package_share_directory('swarm_description')
@@ -43,5 +43,6 @@ def generate_launch_description():
     )
     return LaunchDescription([
         start_world,
-        spawn_robot_world
+        spawn_robot_world,
+        show_robot_description
     ])

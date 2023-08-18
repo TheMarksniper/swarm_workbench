@@ -28,8 +28,8 @@ def gen_robot_list(column: int, row: int):
     return robots 
 
 def generate_launch_description():
-    robot_path = Path(get_package_share_directory("linorobot2_description"))
-    robot_urdf_robot_path = robot_path.joinpath("urdf").joinpath("robots")
+    robot_path = Path(get_package_share_directory("swarm_description"))
+    robot_urdf_robot_path = robot_path.joinpath("linorobot2").joinpath("urdf").joinpath("robots")
     # robot_urdf_robot_path = robot_path.joinpath("linorobot2_description").joinpath("urdf").joinpath("robots")
     xacro_file_path = robot_urdf_robot_path.joinpath("2wd.urdf.xacro")
 
