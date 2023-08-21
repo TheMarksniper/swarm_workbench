@@ -15,7 +15,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
-    pkg_box_bot_gazebo = get_package_share_directory('box_bot_gazebo')
+    pkg_swarm_gazebo = get_package_share_directory('swarm_gazebo')
     # Gazebo launch
     paused_arg = DeclareLaunchArgument(
         'pause',
@@ -30,7 +30,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
           'world',
-          default_value=[os.path.join(pkg_box_bot_gazebo, 'worlds', 'slim_blockage.world'), ''],
+          default_value=[os.path.join(pkg_swarm_gazebo, 'worlds', 'slim_blockage.world'), ''],
           description='SDF world file'),
         paused_arg,
         gazebo

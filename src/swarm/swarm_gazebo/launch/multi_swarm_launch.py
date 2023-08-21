@@ -19,19 +19,19 @@ def generate_launch_description():
     description_launch_path = PathJoinSubstitution(
         [FindPackageShare('linorobot2_description'), 'launch', 'description.launch.py']
     )
-    pkg_box_bot_gazebo = get_package_share_directory('box_bot_gazebo')
-    pkg_box_bot_description = get_package_share_directory('box_bot_description')
+    pkg_swarm_gazebo = get_package_share_directory('swarm_gazebo')
+    pkg_swarm_description = get_package_share_directory('swarm_description')
 
     # Start World
     start_world = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_box_bot_gazebo, 'launch', 'start_world_launch.py'),
+            os.path.join(pkg_swarm_gazebo, 'launch', 'start_world_launch.py'),
         )
     )
 
     spawn_robot_world = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_box_bot_description, 'launch', 'multi_spawn_robot_launch.py'),
+            os.path.join(pkg_swarm_description, 'launch', 'multi_spawn_robot_launch.py'),
         )
     )
     show_robot_description = IncludeLaunchDescription(

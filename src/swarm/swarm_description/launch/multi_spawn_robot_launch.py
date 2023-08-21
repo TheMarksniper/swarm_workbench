@@ -35,10 +35,10 @@ def generate_launch_description():
 
     urdf = xacro.process_file(xacro_file_path.__str__(), mappings={'simulate_obstacles' : 'false'})
 
-    #urdf = os.path.join(get_package_share_directory('box_bot_description'), 'robot/', 'box_bot_v2.urdf')
-    pkg_box_bot_description_path = Path(get_package_share_directory('box_bot_description'))
-    pkg_box_bot_description_robot_path = pkg_box_bot_description_path.joinpath("robot")
-    urdf_file_path = pkg_box_bot_description_robot_path.joinpath("linorobot2.urdf")
+    #urdf = os.path.join(get_package_share_directory('swarm_description'), 'robot/', 'box_bot_v2.urdf')
+    pkg_swarm_description_path = Path(get_package_share_directory('swarm_description'))
+    pkg_swarm_description_robot_path = pkg_swarm_description_path.joinpath("robot")
+    urdf_file_path = pkg_swarm_description_robot_path.joinpath("linorobot2.urdf")
 
     with open(urdf_file_path, "w") as f:
         urdf.writexml(f)
@@ -54,8 +54,8 @@ def generate_launch_description():
 
         spawn_robots_cmds.append(
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(os.path.join(pkg_box_bot_description_path.__str__(), 'launch',
-                                                           'spawn_box_bot_launch.py')),
+                PythonLaunchDescriptionSource(os.path.join(pkg_swarm_description_path.__str__(), 'launch',
+                                                           'spawn_swarm_launch.py')),
                 launch_arguments={
                                   'robot_urdf': urdf_file_path.__str__(),
                                   'x': TextSubstitution(text=str(robot['x_pose'])),

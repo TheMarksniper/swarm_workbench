@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(box_bot_tutorials)
+project(swarm_tutorials)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)

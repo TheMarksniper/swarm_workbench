@@ -42,8 +42,8 @@ def generate_launch_description():
                   ('/tf_static','tf_static')]
     return LaunchDescription([
         launch_ros.actions.Node(
-            package='box_bot_description',
-            executable='spawn_box_bot.py',
+            package='swarm_description',
+            executable='spawn_swarm.py',
             output='screen',
             arguments=[
                 '--robot_urdf', launch.substitutions.LaunchConfiguration('robot_urdf'),

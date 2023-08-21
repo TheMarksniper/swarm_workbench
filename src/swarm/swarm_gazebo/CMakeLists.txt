@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(box_bot_description)
+project(swarm_gazebo)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -18,7 +18,16 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake REQUIRED)
-find_package(urdf REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
+
+
+# Skip if Gazebo not present
+find_package(gazebo QUIET)
+if(NOT gazebo_FOUND)
+  message(WARNING "Gazebo not found, proceeding without that simulator.")
+  return()
+endif()
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -35,15 +44,9 @@ endif()
 install(
   DIRECTORY
     launch
-    robot
+    worlds
   DESTINATION
     share/${PROJECT_NAME}/
-)
-
-install(
-  PROGRAMS
-  launch/spawn_box_bot.py
-  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()
