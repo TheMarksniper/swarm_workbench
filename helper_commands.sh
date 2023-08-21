@@ -1,6 +1,6 @@
-colcon build --merge-install --packages-select box_bot_gazebo --cmake-args -Wno-dev
+colcon build --merge-install --packages-select swarm_gazebo --cmake-args -Wno-dev
 #for colcon build error around cmake with Gazebo files
-ros2 launch box_bot_gazebo multi_box_bot_launch.py 
+ros2 launch swarm_gazebo multi_swarm_launch.py 
 #launch file for multi robot spawning
 #ERROR] [launch]: Caught exception in launch (see debug for traceback):
 #cannot import name 'GazeboRosPaths' from 'scripts' 
@@ -14,4 +14,4 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:
 #change the remap to fit the robot that you want
 
 #first launch should be paused becouse of gazebo
-ros2 launch box_bot_gazebo multi_box_bot_launch.py pause:=true
+ros2 launch swarm_gazebo multi_swarm_launch.py pause:=true
