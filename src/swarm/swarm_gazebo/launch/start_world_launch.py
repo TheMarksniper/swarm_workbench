@@ -26,7 +26,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py'),
         )
-    )  
+    ) 
     return LaunchDescription([
         DeclareLaunchArgument(
           'world',
