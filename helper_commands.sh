@@ -2,12 +2,6 @@ colcon build --merge-install --packages-select swarm_gazebo --cmake-args -Wno-de
 #for colcon build error around cmake with Gazebo files
 ros2 launch swarm_gazebo multi_swarm_launch.py 
 #launch file for multi robot spawning
-#ERROR] [launch]: Caught exception in launch (see debug for traceback):
-#cannot import name 'GazeboRosPaths' from 'scripts' 
-#(/home/swarmmaster/swarm_workbench/install/local/lib/python3.11/dist-packages/scripts/__init__.py)
-cd /install/local/lib/python3.11/dist-packages/scripts/
-rm __init__.py
-#removes the launch file error
 
 #teleoperation file
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/linorobot2_x000_y000/cmd_vel
@@ -25,3 +19,6 @@ ros2 launch swarm_gazebo nav_launch.py namespace:=/linorobot2_x000_y001
 #start all navigations at once 
 ros2 launch swarm_gazebo swarm_nav_launch.py
 
+#rostopic show all running robots
+ros2 topic list | grep --only-matching 'linorobot2_[^/]*' | sort --unique
+#used in multi robot navigation starter
