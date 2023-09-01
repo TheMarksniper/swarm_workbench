@@ -15,3 +15,13 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:
 
 #first launch should be paused becouse of gazebo
 ros2 launch swarm_gazebo multi_swarm_launch.py pause:=true
+
+---------usage of TF2_TOOLS-------------
+ros2 run tf2_tools view_frames --ros-args -r __ns:=/linorobot2_x001_y000 -r /tf:=tf -r /tf_static:=tf_static
+
+#navigation solo starter
+ros2 launch swarm_gazebo nav_launch.py namespace:=/linorobot2_x000_y001
+
+#start all navigations at once 
+ros2 launch swarm_gazebo swarm_nav_launch.py
+
