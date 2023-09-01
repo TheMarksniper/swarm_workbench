@@ -48,6 +48,11 @@ def generate_launch_description():
             default_value='false',
             description='Enable use_sime_time to true'
         ),
+        DeclareLaunchArgument(
+            name='namespace', 
+            default_value="",
+            description='use of namespace'
+        ),
 
         DeclareLaunchArgument(
             name='rviz', 
