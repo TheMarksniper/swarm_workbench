@@ -19,7 +19,7 @@ def gen_robot_list(column: int, row: int):
 
     for x in range(column):
         for y in range(row):
-            robot_name = f"linorobot2_x{x:03}_y{y:03}"
+            robot_name = f"linorobot2_x{x:02}_y{y:02}"
             #robot_name = ""
             x_pos = float(x)
             y_pos = float(y)
@@ -46,7 +46,7 @@ def generate_launch_description():
 
 
     # Names and poses of the robots
-    robots = gen_robot_list(4, 4)
+    robots = gen_robot_list(2, 5)
 
     # We create the list of spawn robots commands
     spawn_robots_cmds = []

@@ -29,7 +29,7 @@ def generate_launch_description():
                 'namespace', default_value='',
                  description='Top-level namespace')
         navigation_launch_path = PathJoinSubstitution(
-            [FindPackageShare('swarm_gazebo'), 'launch', 'nav_launch.py']
+            [FindPackageShare('swarm_navigation'), 'launch', 'nav_launch.py']
         )
         spawn_nav_cmds = []
         for namespace in namespaces:
