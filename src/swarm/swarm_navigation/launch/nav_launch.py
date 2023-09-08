@@ -28,7 +28,7 @@ from nav2_common.launch import RewrittenYaml
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 
-MAP_NAME='playground' #change to the name of your own map here
+MAP_NAME='slim_blockage' #change to the name of your own map here
 
 def generate_launch_description():
     # Get the launch directory

@@ -22,3 +22,8 @@ ros2 launch swarm_gazebo swarm_nav_launch.py
 #rostopic show all running robots
 ros2 topic list | grep --only-matching 'linorobot2_[^/]*' | sort --unique
 #used in multi robot navigation starter
+
+#new dynamic number of robots for spawning using swarm_size arg
+#max size is set to 100, can be expanded in multi_swawn_robot_laucnh.py in swarm descrition
+ros2 launch swarm_gazebo multi_swarm_launch.py swarm_size:=100
+

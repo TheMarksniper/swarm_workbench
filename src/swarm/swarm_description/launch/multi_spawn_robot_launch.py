@@ -8,10 +8,9 @@ import xacro
 
 from ament_index_python.packages import get_package_share_directory, get_package_prefix
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription,GroupAction,DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, TextSubstitution
-
 
 
 def gen_robot_list(column: int, row: int):
@@ -43,17 +42,47 @@ def generate_launch_description():
 
     with open(urdf_file_path, "w") as f:
         urdf.writexml(f)
-
-
+    for arg in sys.argv:
+        if arg.startswith("swarm_size:="):
+            swarm_size_arg = int(arg.split(":=")[1])
+        else:
+            swarm_size_arg = int(10)
+    #declare_number_of_robots = DeclareLaunchArgument(
+    #    'swarm_size',
+    #    default_value=10,
+    #    description='number of robots spawned in swarm, default is 10')
+    #swarm_size_arg = declare_number_of_robots.get_asyncio_future()
     # Names and poses of the robots
-    robots = gen_robot_list(2, 5)
+    if(swarm_size_arg > 100):
+        print('too many, maximum is 100, spawning 10 for now')
+        robots = gen_robot_list(2, 5)
+    elif(swarm_size_arg % 10 == 0):
+        robots = gen_robot_list(5,int(swarm_size_arg/10))
+    elif(swarm_size_arg % 9 == 0):
+        robots = gen_robot_list(5,int(swarm_size_arg/9))
+    elif(swarm_size_arg % 8 == 0):
+        robots = gen_robot_list(4,int(swarm_size_arg/8))   
+    elif(swarm_size_arg % 7 == 0):
+        robots = gen_robot_list(3,int(swarm_size_arg/7))   
+    elif(swarm_size_arg % 6 == 0):
+        robots = gen_robot_list(2,int(swarm_size_arg/6)) 
+    elif(swarm_size_arg % 5 == 0):
+        robots = gen_robot_list(5,int(swarm_size_arg/5))
+    elif(swarm_size_arg % 4 == 0):
+        robots = gen_robot_list(4,int(swarm_size_arg/4))   
+    elif(swarm_size_arg % 3 == 0):
+        robots = gen_robot_list(3,int(swarm_size_arg/3))   
+    elif(swarm_size_arg % 2 == 0):
+        robots = gen_robot_list(2,int(swarm_size_arg/2)) 
+    else: 
+        print('try number that is divisible for matrix spawn (divisible bu 5,4,3,2), spawning 10 for now')
+        robots = gen_robot_list(2, 5)    
 
     # We create the list of spawn robots commands
     spawn_robots_cmds = []
     for robot in robots:
         robot_name = robot["name"]
-
-        spawn_robots_cmds.append(
+        group = GroupAction([
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(os.path.join(pkg_swarm_description_path.__str__(), 'launch',
                                                            'spawn_swarm_launch.py')),
@@ -71,7 +100,8 @@ def generate_launch_description():
                 #launch_arguments={
                 #                  'namespace': robot_name
                 #                  }.items())
-        )
+        ])
+        spawn_robots_cmds.append(group)
 
         #spawn_robots_cmds.append(
         #    IncludeLaunchDescription(
