@@ -53,6 +53,8 @@ def generate_launch_description():
     #    description='number of robots spawned in swarm, default is 10')
     #swarm_size_arg = declare_number_of_robots.get_asyncio_future()
     # Names and poses of the robots
+
+    ##THIS WHOLE THING SHOULD BE A FUNCTION##
     if(swarm_size_arg > 100):
         print('too many, maximum is 100, spawning 10 for now')
         robots = gen_robot_list(2, 5)
@@ -77,6 +79,7 @@ def generate_launch_description():
     else: 
         print('try number that is divisible for matrix spawn (divisible bu 5,4,3,2), spawning 10 for now')
         robots = gen_robot_list(2, 5)    
+    ##ALL THIS##
 
     # We create the list of spawn robots commands
     spawn_robots_cmds = []
