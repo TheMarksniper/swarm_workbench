@@ -46,7 +46,7 @@ def generate_launch_description():
         if arg.startswith("swarm_size:="):
             swarm_size_arg = int(arg.split(":=")[1])
         else:
-            swarm_size_arg = int(10)
+            swarm_size_arg = 10
     #declare_number_of_robots = DeclareLaunchArgument(
     #    'swarm_size',
     #    default_value=10,
@@ -59,15 +59,15 @@ def generate_launch_description():
         print('too many, maximum is 100, spawning 10 for now')
         robots = gen_robot_list(2, 5)
     elif(swarm_size_arg % 10 == 0):
-        robots = gen_robot_list(5,int(swarm_size_arg/10))
+        robots = gen_robot_list(10,int(swarm_size_arg/10))
     elif(swarm_size_arg % 9 == 0):
-        robots = gen_robot_list(5,int(swarm_size_arg/9))
+        robots = gen_robot_list(9,int(swarm_size_arg/9))
     elif(swarm_size_arg % 8 == 0):
-        robots = gen_robot_list(4,int(swarm_size_arg/8))   
+        robots = gen_robot_list(8,int(swarm_size_arg/8))   
     elif(swarm_size_arg % 7 == 0):
-        robots = gen_robot_list(3,int(swarm_size_arg/7))   
+        robots = gen_robot_list(7,int(swarm_size_arg/7))   
     elif(swarm_size_arg % 6 == 0):
-        robots = gen_robot_list(2,int(swarm_size_arg/6)) 
+        robots = gen_robot_list(6,int(swarm_size_arg/6)) 
     elif(swarm_size_arg % 5 == 0):
         robots = gen_robot_list(5,int(swarm_size_arg/5))
     elif(swarm_size_arg % 4 == 0):

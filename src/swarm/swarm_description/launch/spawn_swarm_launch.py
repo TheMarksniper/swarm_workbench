@@ -53,13 +53,27 @@ def generate_launch_description():
                 '-y', launch.substitutions.LaunchConfiguration('y'),
                 '-z', launch.substitutions.LaunchConfiguration('z')]),
         Node(
+          package='joint_state_publisher',
+          executable='joint_state_publisher',
+          #namespace = robot_namespace,
+          #remappings = remappings,
+          name='joint_state_publisher',
+          parameters=[{
+              'use_sim_time':True
+          }]
+        ),
+        Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        namespace=robot_namespace,
-        remappings=remappings,
-        parameters=[{'robot_description': launch.substitutions.Command(['xacro ',os.path.join(linorobot2_description_dir,'urdf/robots/2wd.urdf.xacro')])}]
+        #namespace=robot_namespace,
+        #remappings=remappings,
+        parameters=[{
+            'use_sim_time': True,
+            'robot_description': launch.substitutions.Command(['xacro ',os.path.join(linorobot2_description_dir,'urdf/robots/2wd.urdf.xacro')])
+            }]
 
         ) 
+
         #IncludeLaunchDescription(
         #    PythonLaunchDescriptionSource(description_launch_path),
         #    launch_arguments={

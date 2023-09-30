@@ -32,6 +32,7 @@ MAP_NAME='slim_blockage' #change to the name of your own map here
 
 def generate_launch_description():
     # Get the launch directory
+    swarm_dir = get_package_share_directory('swarm_navigation')
     bringup_dir = get_package_share_directory('nav2_bringup')
     launch_dir = os.path.join(bringup_dir, 'launch')
 
@@ -99,7 +100,7 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'nav2_params.yaml'),
+        default_value=os.path.join(swarm_dir ,'params', 'navigation_params.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(
