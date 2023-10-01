@@ -66,6 +66,7 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('nav2_bringup')
     launch_dir = os.path.join(bringup_dir, 'launch')
     swarm_dir = get_package_share_directory('swarm_navigation')
+    swarm_gazebo_dir = get_package_share_directory('swarm_gazebo')
 
 
     for arg in sys.argv:
@@ -182,9 +183,9 @@ def generate_launch_description():
                                   'rviz_config': rviz_config_file}.items()),
 
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(os.path.join(bringup_dir,
+                PythonLaunchDescriptionSource(os.path.join(swarm_gazebo_dir,
                                                            'launch',
-                                                           'tb3_simulation_launch.py')),
+                                                           'new_launch.py')),
                 launch_arguments={'namespace': robot['name'],
                                   'use_namespace': 'True',
                                   'map': map_yaml_file,
