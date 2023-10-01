@@ -21,6 +21,7 @@ The robots co-exist on a shared environment and are controlled by independent na
 """
 
 import os
+import sys
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -48,13 +49,15 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('nav2_bringup')
     launch_dir = os.path.join(bringup_dir, 'launch')
 
+
+    for arg in sys.argv:
+        if arg.startswith("swarm_size:="):
+            swarm_size_arg = int(arg.split(":=")[1])
+        else:
+            swarm_size_arg = 2
     # Names and poses of the robots
-    #robots = [
-    #    {'name': 'robot1', 'x_pose': 0.0, 'y_pose': 0.5, 'z_pose': 0.01,
-    #                       'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},
-    #    {'name': 'robot2', 'x_pose': 0.0, 'y_pose': -0.5, 'z_pose': 0.01,
-    #                       'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0}]
-    robots = gen_robot_list(2)
+    
+    robots = gen_robot_list(swarm_size_arg)
     print(robots)
     # Simulation settings
     world = LaunchConfiguration('world')
@@ -84,17 +87,7 @@ def generate_launch_description():
         'map',
         default_value=os.path.join(bringup_dir, 'maps', 'turtlebot3_world.yaml'),
         description='Full path to map file to load')
-
-    declare_robot1_params_file_cmd = DeclareLaunchArgument(
-        'robot1_params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'nav2_multirobot_params_1.yaml'),
-        description='Full path to the ROS2 parameters file to use for robot1 launched nodes')
-
-    declare_robot2_params_file_cmd = DeclareLaunchArgument(
-        'robot2_params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'nav2_multirobot_params_2.yaml'),
-        description='Full path to the ROS2 parameters file to use for robot2 launched nodes')
-
+   
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='false',
         description='Automatically startup the stacks')
@@ -122,8 +115,8 @@ def generate_launch_description():
 
     # Define commands for launching the navigation instances
     nav_instances_cmds = []
-    for robot in robots:
-        params_file = LaunchConfiguration(f"{robot['name']}_params_file")
+    for index, robot in enumerate(robots):
+        params_file = os.path.join(bringup_dir, 'params', f'nav2_multirobot_params_{index+1}.yaml')
 
         group = GroupAction([
             IncludeLaunchDescription(
@@ -186,8 +179,6 @@ def generate_launch_description():
     ld.add_action(declare_simulator_cmd)
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_map_yaml_cmd)
-    ld.add_action(declare_robot1_params_file_cmd)
-    ld.add_action(declare_robot2_params_file_cmd)
     ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
