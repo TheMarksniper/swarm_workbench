@@ -75,32 +75,32 @@ def generate_launch_description():
             swarm_size_arg = 5
     # Names and poses of the robots
      ##THIS WHOLE THING SHOULD BE A FUNCTION##
-    #if(swarm_size_arg > 100):
-    #    print('too many, maximum is 100, spawning 10 for now')
-    #    robots = gen_robot_list(2, 5)
-    #elif(swarm_size_arg % 10 == 0):
-    #    robots = gen_robot_list(10,int(swarm_size_arg/10))
-    #elif(swarm_size_arg % 9 == 0):
-    #    robots = gen_robot_list(9,int(swarm_size_arg/9))
-    #elif(swarm_size_arg % 8 == 0):
-    #    robots = gen_robot_list(8,int(swarm_size_arg/8))   
-    #elif(swarm_size_arg % 7 == 0):
-    #    robots = gen_robot_list(7,int(swarm_size_arg/7))   
-    #elif(swarm_size_arg % 6 == 0):
-    #    robots = gen_robot_list(6,int(swarm_size_arg/6)) 
-    #elif(swarm_size_arg % 5 == 0):
-    #    robots = gen_robot_list(5,int(swarm_size_arg/5))
-    #elif(swarm_size_arg % 4 == 0):
-    #    robots = gen_robot_list(4,int(swarm_size_arg/4))   
-    #elif(swarm_size_arg % 3 == 0):
-    #    robots = gen_robot_list(3,int(swarm_size_arg/3))   
-    #elif(swarm_size_arg % 2 == 0):
-    #    robots = gen_robot_list(2,int(swarm_size_arg/2)) 
-    #else: 
-    #    print('try number that is divisible for matrix spawn (divisible bu 5,4,3,2), spawning 10 for now')
-    #    robots = gen_robot_list(2, 5)    
-    ###ALL THIS##
-    robots = gen_robot_list(4, 1)
+    if(swarm_size_arg > 100):
+        print('too many, maximum is 100, spawning 10 for now')
+        robots = gen_robot_list(2, 5)
+    elif(swarm_size_arg % 10 == 0):
+        robots = gen_robot_list(10,int(swarm_size_arg/10))
+    elif(swarm_size_arg % 9 == 0):
+        robots = gen_robot_list(9,int(swarm_size_arg/9))
+    elif(swarm_size_arg % 8 == 0):
+        robots = gen_robot_list(8,int(swarm_size_arg/8))   
+    elif(swarm_size_arg % 7 == 0):
+        robots = gen_robot_list(7,int(swarm_size_arg/7))   
+    elif(swarm_size_arg % 6 == 0):
+        robots = gen_robot_list(6,int(swarm_size_arg/6)) 
+    elif(swarm_size_arg % 5 == 0):
+        robots = gen_robot_list(5,int(swarm_size_arg/5))
+    elif(swarm_size_arg % 4 == 0):
+        robots = gen_robot_list(4,int(swarm_size_arg/4))   
+    elif(swarm_size_arg % 3 == 0):
+        robots = gen_robot_list(3,int(swarm_size_arg/3))   
+    elif(swarm_size_arg % 2 == 0):
+        robots = gen_robot_list(2,int(swarm_size_arg/2)) 
+    else: 
+        print('try number that is divisible for matrix spawn (divisible bu 5,4,3,2), spawning 10 for now')
+        robots = gen_robot_list(2, 5)    
+    ##ALL THIS##
+
     print(robots)
     with open(os.path.join(swarm_dir, 'params','nav2_multirobot_params.yaml'), 'r') as file:
                 params = yaml.safe_load(file)   
