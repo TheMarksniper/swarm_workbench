@@ -22,6 +22,7 @@ The robots co-exist on a shared environment and are controlled by independent na
 
 import os
 import sys
+import yaml
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -32,33 +33,85 @@ from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, TextSubstitution
 
-def gen_robot_list(column: int):
+def gen_robot_list(column: int, row: int):
     robots = []
-    for x in range(column): 
-        print("im running")      
-        robot_name = f"robot{x+1}"
-        #robot_name = ""
-        x_pos = float(x)
-        y_pos = float(1.0)
-        robots.append({'name': robot_name, 'x_pose': x_pos, 'y_pose': y_pos, 'z_pose': 0.01, 
-                                            'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},)
-    return robots
+    i = 0
+    for x in range(column):
+        for y in range(row):
+            i = i+1
+            robot_name = f"robot{i}"
+            #robot_name = ""
+            x_pos = float(x)
+            y_pos = float(y)
+            robots.append({'name': robot_name, 'x_pose': x_pos, 'y_pose': y_pos, 'z_pose': 0.01,
+                                                'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},)
+
+
+    return robots 
+
+#old approach
+#def gen_robot_list(column: int):
+#    robots = []
+#    for x in range(column): 
+#        robot_name = f"robot{x+1}"
+#        #robot_name = ""
+#        x_pos = float(x)
+#        y_pos = float(1.0)
+#        robots.append({'name': robot_name, 'x_pose': x_pos, 'y_pose': y_pos, 'z_pose': 0.01, 
+#                                            'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},)
+#    return robots
 
 def generate_launch_description():
     # Get the launch directory
     bringup_dir = get_package_share_directory('nav2_bringup')
     launch_dir = os.path.join(bringup_dir, 'launch')
+    swarm_dir = get_package_share_directory('swarm_navigation')
 
 
     for arg in sys.argv:
         if arg.startswith("swarm_size:="):
             swarm_size_arg = int(arg.split(":=")[1])
         else:
-            swarm_size_arg = 2
+            swarm_size_arg = 5
     # Names and poses of the robots
-    
-    robots = gen_robot_list(swarm_size_arg)
+     ##THIS WHOLE THING SHOULD BE A FUNCTION##
+    #if(swarm_size_arg > 100):
+    #    print('too many, maximum is 100, spawning 10 for now')
+    #    robots = gen_robot_list(2, 5)
+    #elif(swarm_size_arg % 10 == 0):
+    #    robots = gen_robot_list(10,int(swarm_size_arg/10))
+    #elif(swarm_size_arg % 9 == 0):
+    #    robots = gen_robot_list(9,int(swarm_size_arg/9))
+    #elif(swarm_size_arg % 8 == 0):
+    #    robots = gen_robot_list(8,int(swarm_size_arg/8))   
+    #elif(swarm_size_arg % 7 == 0):
+    #    robots = gen_robot_list(7,int(swarm_size_arg/7))   
+    #elif(swarm_size_arg % 6 == 0):
+    #    robots = gen_robot_list(6,int(swarm_size_arg/6)) 
+    #elif(swarm_size_arg % 5 == 0):
+    #    robots = gen_robot_list(5,int(swarm_size_arg/5))
+    #elif(swarm_size_arg % 4 == 0):
+    #    robots = gen_robot_list(4,int(swarm_size_arg/4))   
+    #elif(swarm_size_arg % 3 == 0):
+    #    robots = gen_robot_list(3,int(swarm_size_arg/3))   
+    #elif(swarm_size_arg % 2 == 0):
+    #    robots = gen_robot_list(2,int(swarm_size_arg/2)) 
+    #else: 
+    #    print('try number that is divisible for matrix spawn (divisible bu 5,4,3,2), spawning 10 for now')
+    #    robots = gen_robot_list(2, 5)    
+    ###ALL THIS##
+    robots = gen_robot_list(4, 1)
     print(robots)
+    with open(os.path.join(swarm_dir, 'params','nav2_multirobot_params.yaml'), 'r') as file:
+                params = yaml.safe_load(file)   
+    for x in range(swarm_size_arg):
+        params['local_costmap']['local_costmap']['ros__parameters']['voxel_layer']['scan']['topic'] = f'/robot{x+1}/scan'
+        params['global_costmap']['global_costmap']['ros__parameters']['obstacle_layer']['scan']['topic'] = f'/robot{x+1}/scan'
+        with open(os.path.join(swarm_dir, 'params',f'nav2_multirobot_params_{x+1}.yaml'), 'w') as yaml_file:
+            yaml.dump(params,yaml_file)
+            yaml_file.close()
+    
+
     # Simulation settings
     world = LaunchConfiguration('world')
     simulator = LaunchConfiguration('simulator')
@@ -116,7 +169,7 @@ def generate_launch_description():
     # Define commands for launching the navigation instances
     nav_instances_cmds = []
     for index, robot in enumerate(robots):
-        params_file = os.path.join(bringup_dir, 'params', f'nav2_multirobot_params_{index+1}.yaml')
+        params_file = os.path.join(swarm_dir, 'params', f'nav2_multirobot_params_{index+1}.yaml')
 
         group = GroupAction([
             IncludeLaunchDescription(
