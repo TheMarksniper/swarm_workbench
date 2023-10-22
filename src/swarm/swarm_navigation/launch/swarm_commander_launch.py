@@ -68,17 +68,17 @@ def generate_launch_description():
     # start the demo autonomy task
     demo_cmd = Node(
         package='swarm_navigation',
-        executable='swarm_commander',
+        executable='slim_blockage_navigator.py',
         emulate_tty=True,
         output='screen')
 
     ld = LaunchDescription()
-    ld.add_action(declare_use_rviz_cmd)
+    #ld.add_action(declare_use_rviz_cmd)
     #ld.add_action(declare_simulator_cmd)
     #ld.add_action(start_gazebo_server_cmd)
     #ld.add_action(start_gazebo_client_cmd)
     #ld.add_action(start_robot_state_publisher_cmd)
-    ld.add_action(rviz_cmd)
+    #ld.add_action(rviz_cmd)
     #ld.add_action(bringup_cmd)
     ld.add_action(demo_cmd)
     return ld

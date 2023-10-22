@@ -1,4 +1,5 @@
-
+#!/bin/sh
+#!/usr/bin/env python3
 from copy import deepcopy
 
 from geometry_msgs.msg import PoseStamped
@@ -9,7 +10,7 @@ from rclpy.duration import Duration
 
 import subprocess
 
-find_robot_namespaces = "ros2 topic list | grep --only-matching 'linorobot2_[^/]*' | sort --unique"
+find_robot_namespaces = "ros2 topic list | grep --only-matching 'Srobot[^/]*' | sort --unique"
 result = subprocess.getoutput(find_robot_namespaces)
 namespaces = []
 namespaces = result.split("\n")
@@ -18,7 +19,7 @@ if namespaces ==[]:
 def main():
     rclpy.init()
 
-    navigator = BasicNavigator(namespace = namespaces[0])
+    navigator = BasicNavigator(namespace = "Srobot1")
 
     # Security route, probably read in from a file for a real application
     # from either a map or drive and repeat.

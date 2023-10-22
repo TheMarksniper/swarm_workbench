@@ -31,4 +31,12 @@ install(
   DESTINATION
     share/${PROJECT_NAME}/
 )
+install( 
+  PROGRAMS
+  launch/swarm_commander.py
+  scripts/slim_blockage_navigator.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+
 ament_package()

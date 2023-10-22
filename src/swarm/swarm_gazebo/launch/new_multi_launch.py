@@ -23,7 +23,7 @@ The robots co-exist on a shared environment and are controlled by independent na
 import os
 import sys
 import yaml
-
+from math import pi
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
@@ -39,12 +39,12 @@ def gen_robot_list(column: int, row: int):
     for x in range(column):
         for y in range(row):
             i = i+1
-            robot_name = f"robot{i}"
+            robot_name = f"Srobot{i}"
             #robot_name = ""
             x_pos = float(x)
             y_pos = float(y)
             robots.append({'name': robot_name, 'x_pose': x_pos, 'y_pose': y_pos, 'z_pose': 0.01,
-                                                'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},)
+                                                'roll': 0.0, 'pitch': 0.0, 'yaw': pi },)
 
 
     return robots 
@@ -67,6 +67,7 @@ def generate_launch_description():
     launch_dir = os.path.join(bringup_dir, 'launch')
     swarm_dir = get_package_share_directory('swarm_navigation')
     swarm_gazebo_dir = get_package_share_directory('swarm_gazebo')
+    linorobot_dir = get_package_share_directory('linorobot2_navigation')
 
 
     for arg in sys.argv:
@@ -129,7 +130,7 @@ def generate_launch_description():
     # Declare the launch arguments
     declare_world_cmd = DeclareLaunchArgument(
         'world',
-        default_value=os.path.join(bringup_dir, 'worlds', 'world_only.model'),
+        default_value=os.path.join(swarm_gazebo_dir, 'worlds', 'slim_blockage.world'),
         description='Full path to world file to load')
 
     declare_simulator_cmd = DeclareLaunchArgument(
@@ -139,11 +140,11 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map',
-        default_value=os.path.join(bringup_dir, 'maps', 'turtlebot3_world.yaml'),
+        default_value=os.path.join(linorobot_dir, 'maps', 'slim_blockage.yaml'),
         description='Full path to map file to load')
    
     declare_autostart_cmd = DeclareLaunchArgument(
-        'autostart', default_value='false',
+        'autostart', default_value='true',
         description='Automatically startup the stacks')
 
     declare_rviz_config_file_cmd = DeclareLaunchArgument(
@@ -203,6 +204,7 @@ def generate_launch_description():
                                   'pitch': TextSubstitution(text=str(robot['pitch'])),
                                   'yaw': TextSubstitution(text=str(robot['yaw'])),
                                   'robot_name':TextSubstitution(text=robot['name']), }.items()),
+                                  
 
             LogInfo(
                 condition=IfCondition(log_settings),

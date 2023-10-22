@@ -30,6 +30,7 @@ def generate_launch_description():
     # Get the launch directory
     bringup_dir = get_package_share_directory('nav2_bringup')
     launch_dir = os.path.join(bringup_dir, 'launch')
+    swarm_dir = get_package_share_directory('swarm_gazebo')
 
     # Create the launch configuration variables
     slam = LaunchConfiguration('slam')
@@ -153,7 +154,7 @@ def generate_launch_description():
 
     declare_robot_sdf_cmd = DeclareLaunchArgument(
         'robot_sdf',
-        default_value=os.path.join(bringup_dir, 'worlds', 'waffle.model'),
+        default_value=os.path.join(swarm_dir, 'models', 'turtlebot3_waffle.sdf'),
         description='Full path to robot sdf file to spawn the robot in gazebo')
 
     # Specify the actions
