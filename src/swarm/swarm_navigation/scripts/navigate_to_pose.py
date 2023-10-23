@@ -67,6 +67,15 @@ def main():
     result = navigator.getResult()
     if result == TaskResult.SUCCEEDED:
         print("good job")
+        shopping_destination_pose = PoseStamped()
+        shopping_destination_pose.header.frame_id = 'map'
+        shopping_destination_pose.header.stamp = navigator.get_clock().now().to_msg()
+        shopping_destination_pose.pose.position.x = shipping_destination[request_destination][0]
+        shopping_destination_pose.pose.position.y = shipping_destination[request_destination][1]
+        shopping_destination_pose.pose.orientation.z = -1.5
+        shopping_destination_pose.pose.orientation.w = 0.0
+        print('recieved request for item drop off at ' + request_destination + '.')
+        navigator.goToPose(shopping_destination_pose)
 
     elif result == TaskResult.CANCELED:
         print('task was cancelled')
