@@ -1,48 +1,47 @@
 #!/bin/sh
 #!/usr/bin/env python3
 from copy import deepcopy
-
+import argparse
 from geometry_msgs.msg import PoseStamped
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 
+import os
 import rclpy
 from rclpy.duration import Duration
+def valid_yaml(param):
+    base, ext = os.path.splitext(param)
+    if ext.lower() not in '.yaml':
+        raise argparse.ArgumentTypeError('File must have a .yaml extension')
+    return param
 
-import subprocess
-
-def findNamespaces(robotname = "Srobot"):
-    find_robot_namespaces = "ros2 topic list | grep --only-matching '"+ robotname +"[^/]*' | sort --unique"
-    result = subprocess.getoutput(find_robot_namespaces)
-    namespaces = []
-    namespaces = result.split("\n")
-    print(namespaces)
-    if namespaces ==[]:
-        print('no robots to command')
-        return ""
-    return namespaces
 def main():
-    Swarm_namespace = findNamespaces()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--robot", type=str, help="Namespace of the robot you wish to control", required=True
+    )
+    parser.add_argument(
+        "--position", type=float,help="x and y position for robots Initial pose", nargs=2, default=[1, 1], required=False
+    )
+    parser.add_argument(
+        "--route", type=valid_yaml, help="File with the loading points,unloading point and circling points", required=True
+    )
+    args = parser.parse_args()
     rclpy.init()
 
-    navigator = BasicNavigator(namespace = "Srobot1")
+    navigator = BasicNavigator(namespace = args.robot)
 
     # Security route, probably read in from a file for a real application
     # from either a map or drive and repeat.
-    security_route = [
-        [1.792, 2.144],
-        [1.792, -5.44],
-        [1.792, -9.427],
-        [-3.665, -9.427],
-        [-3.665, -4.303],
-        [-3.665, 2.330],
-        [-3.665, 9.283]]
+    route = args.route["loading"]
+    unloading = args.route["unloading"]
+    circling = args.route["circling"]
 
     # Set our demo's initial pose
     initial_pose = PoseStamped()
     initial_pose.header.frame_id = 'map'
     initial_pose.header.stamp = navigator.get_clock().now().to_msg()
-    initial_pose.pose.position.x = 3.45
-    initial_pose.pose.position.y = 2.15
+    initial_pose.pose.position.x = args.position[0]
+    initial_pose.pose.position.y = args.position[1]
     initial_pose.pose.orientation.z = 1.0
     initial_pose.pose.orientation.w = 0.0
     navigator.setInitialPose(initial_pose)
@@ -58,7 +57,7 @@ def main():
         pose.header.frame_id = 'map'
         pose.header.stamp = navigator.get_clock().now().to_msg()
         pose.pose.orientation.w = 1.0
-        for pt in security_route:
+        for pt in route:
             pose.pose.position.x = pt[0]
             pose.pose.position.y = pt[1]
             route_poses.append(deepcopy(pose))
@@ -79,9 +78,11 @@ def main():
                 if Duration.from_msg(feedback.navigation_time) > Duration(seconds=180.0):
                     print('Navigation has exceeded timeout of 180s, canceling request.')
                     navigator.cancelTask()
+                    navigator.goThroughPoses(circling)
 
         # If at end of route, reverse the route to restart
-        security_route.reverse()
+        navigator.goToPose(unloading)
+        route.reverse()
 
         result = navigator.getResult()
         if result == TaskResult.SUCCEEDED:
