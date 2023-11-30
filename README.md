@@ -1,6 +1,9 @@
 # swarm_workbench
-workbench for decentralised swarm navigation and mobility
+This project is focused on Decentralised Swarm Operation, from simulation, navigation to production. 
+
+This project schould be workbench for decentralised swarm navigation and mobility
 this multi robot work is using robot from Linorobot 2 project -> https://github.com/linorobot/linorobot2 
+
 
 colcon build --merge-install --packages-select swarm_gazebo --cmake-args -Wno-dev
 #for colcon build error around cmake with Gazebo files
