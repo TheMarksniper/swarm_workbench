@@ -36,7 +36,7 @@ def main():
     request_destination = 'main_shipping'
 
     rclpy.init()
-    navigator = BasicNavigator(namespace="Srobot1")
+    navigator = BasicNavigator(namespace="Srobot2")
     initial_pose = PoseStamped()
     initial_pose.header.frame_id = 'map'
     initial_pose.header.stamp = navigator.get_clock().now().to_msg()

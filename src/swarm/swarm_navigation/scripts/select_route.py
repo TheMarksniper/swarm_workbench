@@ -6,38 +6,41 @@ from copy import deepcopy
 from geometry_msgs.msg import PoseStamped
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 import rclpy
+import argparse
 import subprocess
-import sys
+from rclpy.duration import Duration
 from math import pi
 import random
-import re
+
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--robot", type=str, help="Namespace of the robot you wish to control", required=True
+    )
+    parser.add_argument(
+        "--position", type=float,help="x and y position for robots Initial pose", nargs=2, default=[1.0, 1.0], required=False
+    )
+    args = parser.parse_args()
     rclpy.init()
     find_robot_namespaces = "ros2 topic list | grep --only-matching 'Srobot[^/]*' | sort --unique"
     #os.system(find_robot_namespaces)
     result = subprocess.getoutput(find_robot_namespaces)
     namespaces = result.split("\n")
-    for i in range(1, len(sys.argv)):
-        print(sys.argv[i])
-        if sys.argv[i] in namespaces:
+    print(namespaces)
+    if args.robot in namespaces:
             print("good namespace")
-            name = sys.argv[i]
-            j = re.findall(r'\d+', name)
-            print(float(j[0]))
-            x_pos = -1.0 + float(j[0])
-        else:
+    else:
             print("bad namespace")
             exit(-3)
-    inspection_route = [
-        [3.461, -0.450],
-        [5.531, -0.450],
-        [3.461, -2.200],
-        [5.531, -2.200],
-        [3.661, -4.121],
-        [5.431, -4.121],
-        [3.661, -5.850],
-        [5.431, -5.800]]
+    circling = [
+    [-5.990370, 8.674410],
+    [-2.706150, 8.674410],
+    [-2.706150,-3.947350],
+    [-5.990370,-3.947350],
+    ]
+    unload = [5.0, 5.0]
+
     loader_positions = [
         [-7.745750,-3.577660],
         [-7.745750,-1.385260],
@@ -47,12 +50,12 @@ def main():
         [-7.745750, 8.363370],
     ]
    
-    navigator = BasicNavigator(namespace=name)
+    navigator = BasicNavigator(namespace=args.robot)
     initial_pose = PoseStamped()
     initial_pose.header.frame_id = 'map'
     initial_pose.header.stamp = navigator.get_clock().now().to_msg()
-    initial_pose.pose.position.x = x_pos
-    initial_pose.pose.position.y = 1.0
+    initial_pose.pose.position.x = args.position[0]
+    initial_pose.pose.position.y = args.position[1]
     initial_pose.pose.orientation.z = 1.0
     initial_pose.pose.orientation.w = 0.0
     navigator.setInitialPose(initial_pose)
@@ -82,14 +85,24 @@ def main():
         if feedback and i % 5 == 0:
             print('Executing current waypoint: ' +
                   str(feedback.current_waypoint + 1) + '/' + str(len(inspection_points)))
+            print('Estimated time to complete current route: ' + '{0:.0f}'.format(
+                      Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9)
+                      + ' seconds.')
+            
+            if Duration.from_msg(feedback.navigation_time) > Duration(seconds=180.0):
+                    print('Navigation has exceeded timeout of 180s, canceling request.')
+                    navigator.cancelTask()
+                    
 
     result = navigator.getResult()
     if result == TaskResult.SUCCEEDED:
-        print('Inspection of shelves complete! Returning to start...')
+        print('Loading complete! going to unload...')
+        navigator.goToPose(unload)
     elif result == TaskResult.CANCELED:
-        print('Inspection of shelving was canceled. Returning to start...')
+        print('Loading was canceled. Circling to try again...')
+        navigator.goThroughPoses(circling)
     elif result == TaskResult.FAILED:
-        print('Inspection of shelving failed! Returning to start...')
+        print('Loading failed! Returning to start...')
 
     # go back to start
     initial_pose.header.stamp = navigator.get_clock().now().to_msg()

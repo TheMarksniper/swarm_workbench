@@ -27,3 +27,8 @@ ros2 topic list | grep --only-matching 'linorobot2_[^/]*' | sort --unique
 #max size is set to 100, can be expanded in multi_swawn_robot_laucnh.py in swarm descrition
 ros2 launch swarm_gazebo multi_swarm_launch.py swarm_size:=100
 
+#new multi launch works pretty much same, but should be more general approach
+#with changeble robot types (linorobot/turtlebot,etc.)
+#also this one autogenerates parameter files and autostarts nav2 on every robot
+ros2 launch swarm_gazebo new_multi_launch.py swarm_size:=20
+
